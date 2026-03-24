@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>International Space Station | Curio Pieces</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f7f3ed;
+      color: #2b2b2b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 20px 64px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin: 0 auto 28px;
+      max-width: 34rem;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #5f574f;
+    }
+
+    .map-card {
+      margin: 0 auto 24px;
+      max-width: 520px;
+      background: #fffdf9;
+      border: 1px solid #ddd3c7;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+
+    .map-wrap {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      aspect-ratio: 3 / 2;
+    }
+
+    .map-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .footer {
+      margin-top: 34px;
+      font-size: 0.92rem;
+      color: #7a7267;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 44px 16px 52px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+        margin-bottom: 22px;
+      }
+
+      .map-card {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>International Space Station</h1>
+    <p class="subtitle">See where it is right now.</p>
+
+    <section class="map-card">
+      <div class="map-wrap">
+        <iframe
+          src="https://isstracker.pl/en/widget/map?&disableInfoBox=1&lang=en&z=4&mapType=satellite&units=metric&preloader=1&showSatTooltip=0&dayNightLayer=1&showFutureOrbit=1&coverageColor=FFFFFF"
+          title="ISS Tracker">
+        </iframe>
+      </div>
+    </section>
+
+    <div class="footer">
+      Curio Pieces
+    </div>
+  </main>
+</body>
+</html>
