@@ -75,12 +75,19 @@
     <h1>Aquarius</h1>
     <p class="subtitle">A small moment of reflection.</p>
 
-    <section class="widget-card">
-      <script src="https://vedika.io/widget.js"
-        data-sign="aquarius"
-        data-theme="purple">
-      </script>
-    </section>
+<section class="widget-card">
+  <div id="zodiac-widget"></div>
+
+  <script>
+    const script = document.createElement("script");
+    script.src = "https://vedika.io/widget.js";
+    script.setAttribute("data-sign", "aquarius");
+    script.setAttribute("data-theme", "purple");
+    script.async = true;
+
+    document.getElementById("zodiac-widget").appendChild(script);
+  </script>
+</section>
 
     <div class="footer">
       Curio Pieces
