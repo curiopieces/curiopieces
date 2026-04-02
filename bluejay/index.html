@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Blue Jay | Curio Pieces</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Libre+Baskerville:wght@400&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -14,7 +15,7 @@
       padding: 0;
       background: #f7f3ed;
       color: #2b2b2b;
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     .container {
@@ -26,9 +27,10 @@
 
     h1 {
       margin: 0 0 10px;
+      font-family: "Libre Baskerville", Georgia, serif;
       font-size: 2rem;
       line-height: 1.2;
-      font-weight: 600;
+      font-weight: 400;
       letter-spacing: 0.01em;
     }
 
@@ -72,25 +74,53 @@
       color: #6a6258;
     }
 
-    .credit a,
-    .footer a {
+    .credit a {
       color: inherit;
       text-decoration: none;
       border-bottom: 1px solid #b8aea1;
       padding-bottom: 1px;
     }
 
-    .credit a:hover,
-    .footer a:hover {
+    .credit a:hover {
       border-bottom-color: #2b2b2b;
     }
 
     .footer {
-      margin-top: 34px;
-      font-size: 0.92rem;
-      color: #7a7267;
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
     }
 
+.footer {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+}
+
+.brand img {
+  width: 28px;
+  height: auto;
+  display: block;
+}
+
+.copyright {
+  font-size: 12px;
+  color: #a59f96;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+}
     @media (max-width: 600px) {
       .container {
         padding: 44px 16px 52px;
@@ -111,6 +141,21 @@
 
       .player-wrap iframe {
         height: 115px;
+      }
+
+      .footer img {
+        width: 180px;
+      }
+      .brand {
+      font-size: 18px;
+      }
+
+      .brand img {
+      width: 24px;
+      }
+
+      .copyright {
+      font-size: 11px;
       }
     }
   </style>
@@ -138,9 +183,17 @@
       </div>
     </section>
 
-    <div class="footer">
-      Curio Pieces
-    </div>
+<div class="footer">
+  <div class="brand">
+    <span>Curio</span>
+    <img src="/assets/spark.png" alt="spark logo">
+    <span>Pieces</span>
+  </div>
+
+  <div class="copyright">
+    © 2026 Curio Pieces. All rights reserved.
+  </div>
+</div>
   </main>
 </body>
 </html>
