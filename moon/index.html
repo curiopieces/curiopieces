@@ -48,43 +48,36 @@
       background: #fffdf9;
       border: 1px solid #ddd3c7;
       border-radius: 16px;
-      padding: 36px 14px 20px;
+      padding: 28px 18px 22px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-      overflow: visible;
     }
 
-    .moon-module {
+    .moon-visual {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 320px;
+      margin-bottom: 18px;
     }
 
-    .moon-scale {
-      transform: scale(2.2);
-      transform-origin: center;
-    }
-
-    .moon-scale img {
+    .moon-svg {
+      width: 240px;
+      max-width: 72vw;
+      height: auto;
       display: block;
     }
 
-    .credit {
-      margin-top: 22px;
-      font-size: 0.95rem;
-      line-height: 1.5;
+    .phase-name {
+      font-family: "Libre Baskerville", Georgia, serif;
+      font-size: 1.35rem;
+      line-height: 1.3;
+      margin: 0 0 8px;
+      color: #2b2b2b;
+    }
+
+    .phase-detail {
+      font-size: 0.98rem;
+      line-height: 1.6;
       color: #6a6258;
-    }
-
-    .credit a {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid #b8aea1;
-      padding-bottom: 1px;
-    }
-
-    .credit a:hover {
-      border-bottom-color: #2b2b2b;
+      margin: 0;
     }
 
     .footer {
@@ -134,15 +127,15 @@
 
       .module-card {
         max-width: 100%;
-        padding: 28px 10px 18px;
+        padding: 24px 14px 18px;
       }
 
-      .moon-module {
-        min-height: 260px;
+      .moon-svg {
+        width: 210px;
       }
 
-      .moon-scale {
-        transform: scale(1.8);
+      .phase-name {
+        font-size: 1.2rem;
       }
 
       .brand {
@@ -166,17 +159,9 @@
     <p class="subtitle">See the moon as it is tonight.</p>
 
     <section class="module-card">
-      <div class="moon-module">
-        <div class="moon-scale">
-          <a href="https://www.moonconnection.com" target="_blank" rel="noopener noreferrer">
-            <img src="https://www.moonmodule.com/cs/dm/vn.gif" alt="Current moon phase" />
-          </a>
-        </div>
-      </div>
-
-      <div class="credit">
-        Moon phase module via <a href="https://www.moonconnection.com/" target="_blank" rel="noopener noreferrer">MoonConnection</a>.
-      </div>
+      <div class="moon-visual" id="moon-visual"></div>
+      <p class="phase-name" id="phase-name">Loading moon phase…</p>
+      <p class="phase-detail" id="phase-detail"></p>
     </section>
 
     <div class="footer">
@@ -191,5 +176,145 @@
       </div>
     </div>
   </main>
-</body>
-</html>
+
+  <script>
+<script>
+  function getMoonData(date = new Date()) {
+    const synodicMonth = 29.530588853;
+    const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
+
+    const nowUTC = Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds()
+    );
+
+    const daysSince = (nowUTC - knownNewMoon) / 86400000;
+    const age = ((daysSince % synodicMonth) + synodicMonth) % synodicMonth;
+    const illumination = 0.5 * (1 - Math.cos((2 * Math.PI * age) / synodicMonth));
+
+    let phaseName = "";
+    if (age < 1.84566) phaseName = "New Moon";
+    else if (age < 5.53699) phaseName = "Waxing Crescent";
+    else if (age < 9.22831) phaseName = "First Quarter";
+    else if (age < 12.91963) phaseName = "Waxing Gibbous";
+    else if (age < 16.61096) phaseName = "Full Moon";
+    else if (age < 20.30228) phaseName = "Waning Gibbous";
+    else if (age < 23.99361) phaseName = "Last Quarter";
+    else if (age < 27.68493) phaseName = "Waning Crescent";
+    else phaseName = "New Moon";
+
+    const waxing = age < synodicMonth / 2;
+
+    return {
+      age,
+      illumination,
+      phaseName,
+      waxing
+    };
+  }
+
+  function realisticMoonSVG(illumination, waxing) {
+    const size = 320;
+    const cx = size / 2;
+    const cy = size / 2;
+    const r = 118;
+
+    // phase control:
+    // illumination 0..1
+    // k: -1 new moon, 0 quarter, +1 full moon
+    const k = 2 * illumination - 1;
+    const innerRx = Math.max(2, Math.abs(k) * r);
+
+    const sweepOuter = waxing ? 1 : 0;
+    const sweepInner = waxing ? 0 : 1;
+
+    const litPath = `
+      M ${cx} ${cy - r}
+      A ${r} ${r} 0 0 ${sweepOuter} ${cx} ${cy + r}
+      A ${innerRx} ${r} 0 0 ${sweepInner} ${cx} ${cy - r}
+      Z
+    `;
+
+    return `
+      <svg class="moon-svg" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Current moon phase">
+        <defs>
+          <radialGradient id="moonBase" cx="42%" cy="38%" r="65%">
+            <stop offset="0%" stop-color="#f4f1ea"/>
+            <stop offset="55%" stop-color="#e6e0d4"/>
+            <stop offset="100%" stop-color="#cfc6ba"/>
+          </radialGradient>
+
+          <radialGradient id="shadowGrad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#1f1f1f"/>
+            <stop offset="100%" stop-color="#111111"/>
+          </radialGradient>
+
+          <filter id="moonShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#000000" flood-opacity="0.14"/>
+          </filter>
+
+          <filter id="textureNoise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+            <feColorMatrix in="noise" type="saturate" values="0" />
+            <feComponentTransfer>
+              <feFuncA type="table" tableValues="0 0.06"/>
+            </feComponentTransfer>
+          </filter>
+
+          <clipPath id="moonClip">
+            <circle cx="${cx}" cy="${cy}" r="${r}" />
+          </clipPath>
+
+          <mask id="litMask">
+            <rect width="100%" height="100%" fill="black"/>
+            <path d="${litPath}" fill="white"/>
+          </mask>
+        </defs>
+
+        <!-- dark disk -->
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#shadowGrad)" filter="url(#moonShadow)"/>
+
+        <!-- lit moon base -->
+        <g mask="url(#litMask)">
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#moonBase)"/>
+
+          <!-- maria / darker lunar seas -->
+          <g clip-path="url(#moonClip)" opacity="0.22">
+            <ellipse cx="${cx - 30}" cy="${cy - 18}" rx="28" ry="18" fill="#9f9689"/>
+            <ellipse cx="${cx + 18}" cy="${cy - 38}" rx="22" ry="14" fill="#a79d90"/>
+            <ellipse cx="${cx + 34}" cy="${cy + 10}" rx="18" ry="12" fill="#a79d90"/>
+            <ellipse cx="${cx - 8}" cy="${cy + 34}" rx="26" ry="16" fill="#9f9689"/>
+            <ellipse cx="${cx - 44}" cy="${cy + 26}" rx="16" ry="10" fill="#aaa092"/>
+          </g>
+
+          <!-- subtle crater texture -->
+          <g clip-path="url(#moonClip)" opacity="0.35">
+            <circle cx="${cx - 52}" cy="${cy - 46}" r="8" fill="none" stroke="#b8aea1" stroke-width="2"/>
+            <circle cx="${cx + 40}" cy="${cy - 20}" r="10" fill="none" stroke="#b8aea1" stroke-width="2"/>
+            <circle cx="${cx - 18}" cy="${cy + 12}" r="6" fill="none" stroke="#b8aea1" stroke-width="1.5"/>
+            <circle cx="${cx + 2}" cy="${cy + 48}" r="7" fill="none" stroke="#b8aea1" stroke-width="1.8"/>
+            <circle cx="${cx - 36}" cy="${cy + 38}" r="5" fill="none" stroke="#b8aea1" stroke-width="1.4"/>
+            <circle cx="${cx + 52}" cy="${cy + 36}" r="6" fill="none" stroke="#b8aea1" stroke-width="1.5"/>
+          </g>
+
+          <!-- soft noise texture -->
+          <rect x="${cx - r}" y="${cy - r}" width="${2*r}" height="${2*r}" filter="url(#textureNoise)" clip-path="url(#moonClip)"/>
+        </g>
+
+        <!-- crisp edge -->
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#c8beb2" stroke-width="1.5"/>
+      </svg>
+    `;
+  }
+
+  const moon = getMoonData();
+  const pct = Math.round(moon.illumination * 100);
+
+  document.getElementById("moon-visual").innerHTML = realisticMoonSVG(moon.illumination, moon.waxing);
+  document.getElementById("phase-name").textContent = moon.phaseName;
+  document.getElementById("phase-detail").textContent = `${pct}% illuminated`;
+</script>
