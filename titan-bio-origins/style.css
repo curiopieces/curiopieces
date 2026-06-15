@@ -324,15 +324,7 @@ video {
   .progress {
     display: none;
   }
-@media (max-width: 800px) {
-  .icebath-desktop {
-    display: none;
-  }
 
-  .icebath-mobile {
-    display: block;
-  }
-}
   .hero-grid,
   .feature-row,
   .trio,
@@ -364,8 +356,24 @@ video {
     left: auto;
     bottom: auto;
     transform: none;
-  
     width: auto;
     margin: -8px 12px 22px;
   }
+
+  .ice-bath-row {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .hero-bubble {
+    order: -1;
+  }
+
+  .ice-bath-row img,
+  .ice-bath-row figure,
+  .ice-bath-row > img {
+    height: auto;
+  }
+}
   
