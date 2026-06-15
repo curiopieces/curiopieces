@@ -324,7 +324,15 @@ video {
   .progress {
     display: none;
   }
+@media (max-width: 800px) {
+  .icebath-desktop {
+    display: none;
+  }
 
+  .icebath-mobile {
+    display: block;
+  }
+}
   .hero-grid,
   .feature-row,
   .trio,
